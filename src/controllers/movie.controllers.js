@@ -37,7 +37,7 @@ const update = catchError(async(req, res) => {
     return res.json(result[1][0]);
 });
 
-const setGenre = catchError(async(req, res)=>{
+const setGenre = catchError(async(req, res)=>{// /movies/:id/genres
     const {id} = req.params
     const movie = await Movie.findByPk(id)
     await movie.setGenres(req.body)
@@ -45,7 +45,7 @@ const setGenre = catchError(async(req, res)=>{
     return res.json(genres)
 })
 
-const setDirector = catchError(async(req, res) => {
+const setDirector = catchError(async(req, res) => {// /movies/:id/directors
     const {id} = req.params
     const movie = await Movie.findByPk(id)
     await movie.setDirectors(req.body);
@@ -53,7 +53,7 @@ const setDirector = catchError(async(req, res) => {
     return res.json(directors)
 })
 
-const setActor = catchError(async(req, res)=> {
+const setActor = catchError(async(req, res)=> { // /movies/:id/actors
     const {id}= req.params;//obtenemos el id para luego usarlo para obtener la movie, el id viene en los parámetros (/:id/...)
     const movie = await Movie.findByPk(id);// mediante el id obtengo la movie a la cual le agregaremos actors
     await movie.setActors(req.body);//agregamos los actors que vienen en el body del request(del frontend)

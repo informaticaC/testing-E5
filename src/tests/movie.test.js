@@ -1,6 +1,10 @@
 const request = require("supertest");
-const app = require("../app")
+const app = require("../app");
+const Actor = require("../models/Actor");
+const Director = require("../models/Director");
+const Genre = require("../models/Genre");
 require('../models')
+
 
 const URL_BASE = '/api/v1/movies'
 let movieId;
@@ -61,6 +65,66 @@ test("PUT 'URL_BASE', should return status code 200 and res.body.name === bodyFo
 
 })
 
+test('POST `URL_BASE/:id/actors`, should return', async() => { 
+    const bodyActorForTest ={
+        firstName: "Paco",
+        lastName: "Maloso",
+        nationality: "afganistan",
+        image: "actor photo",
+        birthday: "1980-11-20"
+    };
+
+    const actor = await Actor.create(bodyActorForTest);
+
+    const res = await request(app)
+        .post(`${URL_BASE}/${movieId}/actors`)
+        .send([actor.id])
+
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveLength(1)
+
+    actor.destroy();
+ })
+
+ test('POST `URL_BASE/:id/directors`, should return', async() => { 
+    const bodyDirectorForTest ={
+        firstName: "Loco",
+        lastName: "Lindo",
+        nationality: "Ever Green",
+        image: "director photo",
+        birthday: "1980-11-20"
+    };
+
+    const director = await Director.create(bodyDirectorForTest);
+
+    const res = await request(app)
+        .post(`${URL_BASE}/${movieId}/directors`)
+        .send([director.id])
+
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveLength(1)
+
+    director.destroy();
+ })
+
+ test('POST `URL_BASE/:id/genres`, should return', async() => { 
+    const bodyGenreForTest ={
+        name: "de llorar"
+        
+    };
+
+    const genre = await Genre.create(bodyGenreForTest);
+
+    const res = await request(app)
+        .post(`${URL_BASE}/${movieId}/genres`)
+        .send([genre.id])
+
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveLength(1)
+
+    genre.destroy();
+ })
+
 test("DELETE 'URL_BASE', should return status code 204", async()=>{ 
 
     const res = await request(app)
@@ -68,22 +132,3 @@ test("DELETE 'URL_BASE', should return status code 204", async()=>{
 
     expect(res.status).toBe(204)
 })
-
-
-// routerMovie.route('/')
-//     .get(getAll)
-//     .post(create);
-
-// routerMovie.route('/:id')
-//     .get(getOne)
-//     .delete(remove)
-//     .put(update);
-
-// routerMovie.route('/:id/genres') // --> /movies/<:id>/genres
-//     .post(setGenre);             // --> add genres to id's movie
-
-// routerMovie.route('/:id/directors') // --> /movies/<:id>/directors
-//     .post(setDirector);             // --> add directors to id's movie
-
-// routerMovie.route('/:id/actors') // --> /movies/<:id>/actors
-//     .post(setActor);             // --> add actors to id's movie
